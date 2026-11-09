@@ -1,0 +1,20 @@
+#!/bin/sh
+# Blocks commits that stage private working files or local secrets.
+# Enable once per clone:  git config core.hooksPath .githooks
+# See "Working files and documentation" in AGENTS.md.
+
+blocked=$(git diff --cached --name-only --diff-filter=ACMR | grep -E \
+  -e '^\.local/' \
+  -e '^visual-review(/|\.zip$)' \
+  -e '^\.claude/skills/' \
+  -e '^\.idea/' \
+  -e '(^|/)\.env($|\.)' \
+  -e '^(AUTONOMOUS_EXECUTION|EXECUTION_[A-Z_]+|DEPLOYMENT|DESIGN_REFERENCE_RESEARCH|PROJECT_OVERVIEW|REPOSITORY_CLEANUP_REPORT|V2_COMPLETION_REPORT|GITHUB_RELEASE_PREPARATION)\.md$' \
+  | grep -v -E '(^|/)\.env\.example$')
+
+if [ -n "$blocked" ]; then
+  echo "pre-commit: these staged files look private and are blocked:" >&2
+  echo "$blocked" | sed 's/^/  /' >&2
+  echo "Unstage them (git restore --staged <file>) or move them to .local/." >&2
+  exit 1
+fi

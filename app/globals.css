@@ -1,0 +1,250 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme inline {
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-plex);
+  --font-mono: var(--font-jetbrains);
+  --color-background: hsl(var(--background));
+  --color-surface: hsl(var(--surface));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-surface-elevated: hsl(var(--surface-elevated));
+  --color-ink: hsl(var(--ink));
+  --color-muted: hsl(var(--muted));
+  --color-muted-subtle: hsl(var(--muted-subtle));
+  --color-border: hsl(var(--border));
+  --color-accent: hsl(var(--accent));
+  --color-accent-ink: hsl(var(--accent-ink));
+  --color-secondary: hsl(var(--secondary));
+}
+
+:root {
+  color-scheme: light;
+  --background: 210 21% 94%;
+  --surface: 200 27% 98%;
+  --surface-raised: 200 24% 96%;
+  --surface-elevated: 200 24% 96%;
+  --ink: 208 36% 12%;
+  --muted: 209 12% 41%;
+  --muted-subtle: 209 12% 41%;
+  --border: 205 17% 83%;
+  --accent: 17 88% 45%;
+  --accent-ink: 17 91% 34%;
+  --secondary: 174 63% 30%;
+  --code-keyword: 281 42% 37%;
+  --code-value: 23 66% 34%;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: 0 0% 3.1%;
+  --surface: 0 0% 6.7%;
+  --surface-raised: 0 0% 10.2%;
+  --surface-elevated: 0 0% 12.5%;
+  --ink: 0 0% 96.1%;
+  --muted: 240 5% 65%;
+  --muted-subtle: 0 0% 55%;
+  --border: 0 0% 16.5%;
+  --accent: 17.1 100% 63.5%;
+  --accent-ink: 17.1 100% 63.5%;
+  --secondary: 173.7 48% 53.3%;
+  --code-keyword: 281 70% 80%;
+  --code-value: 23 88% 74%;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: hsl(var(--background));
+}
+
+body {
+  min-height: 100vh;
+  background: hsl(var(--background));
+  color: hsl(var(--ink));
+  font-family: var(--font-plex), sans-serif;
+}
+
+::selection {
+  background: hsl(var(--accent) / 0.2);
+  color: hsl(var(--ink));
+}
+
+.code-keyword {
+  color: hsl(var(--code-keyword));
+}
+
+.code-value {
+  color: hsl(var(--code-value));
+}
+
+.dark .workspace-preview {
+  background: hsl(var(--surface-elevated));
+}
+
+.dark header nav {
+  box-shadow: 0 8px 32px rgb(0 0 0 / 40%);
+}
+
+.dark .workspace-card {
+  box-shadow: 0 24px 80px rgb(0 0 0 / 42%);
+}
+
+.dark .hero-primary-action {
+  background: hsl(var(--accent));
+  color: hsl(var(--background));
+}
+
+.workspace-code-line {
+  position: relative;
+  display: block;
+  width: var(--typing-width);
+  min-height: 1.9em;
+}
+
+.workspace-code-line--blank {
+  width: 0;
+}
+
+.workspace-code-content {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: max-content;
+  white-space: pre;
+}
+
+.workspace-code-content[data-code-complete="true"] {
+  clip-path: none !important;
+  animation: none !important;
+}
+
+.workspace-sequence-running .workspace-code-line:not(.workspace-code-line--blank) .workspace-code-content {
+  clip-path: inset(0 100% 0 0);
+  animation: workspace-code-reveal var(--typing-duration) steps(var(--typing-steps), end) var(--typing-delay) both;
+}
+
+.workspace-sequence-running .workspace-code-line:not(.workspace-code-line--blank) .workspace-code-content::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: hsl(var(--accent));
+  content: "";
+  opacity: 0;
+  animation:
+    workspace-caret-position var(--typing-duration) steps(var(--typing-steps), end) var(--typing-delay) 1,
+    workspace-caret-blink 260ms steps(1, end) var(--typing-delay) var(--typing-blinks);
+}
+
+.workspace-sequence-paused *,
+.workspace-sequence-paused *::before,
+.workspace-sequence-paused *::after {
+  animation-play-state: paused !important;
+}
+
+.workspace-preview-step {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.workspace-preview-step.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes workspace-code-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes workspace-caret-position {
+  to {
+    transform: translateX(var(--typing-width));
+  }
+}
+
+@keyframes workspace-caret-blink {
+  0%, 45% {
+    opacity: 1;
+  }
+
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: hero-enter 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-enter-copy {
+  animation-delay: 120ms;
+}
+
+.hero-enter-actions {
+  animation-delay: 240ms;
+}
+
+.hero-enter-workspace {
+  animation-delay: 160ms;
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .workspace-sequence-running .workspace-code-line .workspace-code-content {
+    clip-path: none;
+    animation: none;
+  }
+
+  .workspace-sequence-running .workspace-code-content::after {
+    display: none;
+    animation: none;
+  }
+
+  .workspace-preview-step {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .workspace-preview-placeholder {
+    display: none;
+  }
+}

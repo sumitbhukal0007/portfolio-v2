@@ -1,6 +1,6 @@
 # Sumit Bhukal — Portfolio
 
-Personal portfolio of Sumit Bhukal, a full-stack developer. It is a single-page site built with Next.js, React, TypeScript and Tailwind CSS v4.
+Hi, I'm Sumit, a full-stack developer, and this is the second take on my corner of the web. It's one page, built with Next.js, React, TypeScript and Tailwind CSS v4. Scroll to the top and a little code editor types out a React component, then renders it right beside the code.
 
 | Dark theme | Light theme |
 | --- | --- |
@@ -46,6 +46,8 @@ Fonts (Bricolage Grotesque, IBM Plex Sans, JetBrains Mono) are self-hosted from 
 bun install --frozen-lockfile
 bun run dev
 ```
+
+`--frozen-lockfile` installs exactly what `bun.lock` records and fails if it is out of sync with `package.json`. Use it for fresh clones and CI. To change dependencies, use `bun add` or `bun remove` and commit the updated `bun.lock` with `package.json`.
 
 Then open <http://localhost:3000>.
 

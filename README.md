@@ -97,7 +97,6 @@ data/
 e2e/
   homepage.spec.ts  Playwright end-to-end and accessibility tests
 docs/screenshots/   Images used in this README
-tailwind.config.ts  Legacy theme configuration, loaded by globals.css through @config
 ```
 
 ## Architecture
@@ -142,7 +141,6 @@ Automated checks catch only part of what affects accessibility. Manual screen-re
 - Projects are not shown yet. Independent personal projects will be added in a future update once they are complete and verified.
 - There is no canonical domain, social share image, sitemap or `robots.txt` yet. These depend on the final domain.
 - The tests run in Chromium only. Other browsers have not been tested systematically.
-- `tailwind.config.ts` is a leftover from the Tailwind v3 setup and still provides some theme values.
 
 ## Roadmap
 

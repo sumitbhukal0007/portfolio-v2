@@ -316,6 +316,14 @@ V2.0 presentation decisions:
 - **Theme control:** a single control that cycles System → Light → Dark. It defaults to System.
 - **Metadata:** app icons use an approved-colour "SB." monogram. The share image is deferred until a domain is confirmed, because it requires `metadataBase`.
 
+### Cross-browser testing (2026-11-25)
+
+- The Playwright end-to-end and accessibility suite runs in three desktop engines: Chromium, Firefox and WebKit (Playwright `Desktop Chrome`, `Desktop Firefox` and `Desktop Safari` device profiles).
+- Run the suite serially (`--workers=1`). The workspace animation timing test is unreliable under parallel load in all three engines.
+- Firefox tests are retried once. Playwright's Firefox build intermittently crashes the page during the axe scan (seen on Windows, against both the development and production builds). This is not an application or accessibility failure. A retried pass is reported as flaky, and it should not be treated as a clean pass if it becomes frequent. Chromium and WebKit have no retries.
+- In WebKit, the skip-link test focuses the link directly, because Safari skips links on Tab by default. Chromium and Firefox verify that it is the first Tab stop.
+- Real Safari, iOS and Android devices have not been tested.
+
 ### Future additions (V2.1 and later)
 
 Each addition requires verified, user-approved content:
@@ -373,3 +381,4 @@ This file should evolve as the project develops.
 - Clean repository (2026-11-08): this repository was created from an allowlisted copy of the V2 working tree with fresh Git history (branch `main`). V1 history, private working notes, design-research captures, IDE state and the third-party agent skill files (`.agents/`, `skills-lock.json`, pending licensing review) were not carried over.
 - Contact email removed (2026-11-09): at the user's request the public email and `mailto:` link were removed. A contact form is planned for later; until a contact method exists, the Contact section and its navigation link are hidden.
 - Tailwind CSS v4 migration completed (2026-11-24): removed the legacy v3 `tailwind.config.ts` (its `@config` import) and the `tailwindcss-animate` dependency, which only that config used. Theme tokens now come solely from `@theme` in `app/globals.css`. This also fixed `rounded-lg`, which had resolved to an undefined `--radius` variable.
+- Cross-browser testing (2026-11-25): Playwright tests extended from Chromium only to Chromium, Firefox and WebKit, with one retry for Firefox only (see §10 Cross-browser testing).

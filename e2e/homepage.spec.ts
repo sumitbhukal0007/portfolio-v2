@@ -192,11 +192,16 @@ test("contact section and its navigation link stay hidden until a contact method
   await expect(page.locator("footer")).toBeVisible()
 })
 
-test("keyboard users can skip directly to the main content", async ({ page }) => {
+test("keyboard users can skip directly to the main content", async ({ page, browserName }) => {
   await page.goto("/")
-  await page.keyboard.press("Tab")
-
   const skipLink = page.getByRole("link", { name: "Skip to content" })
+
+  // Playwright's WebKit follows Safari's default of skipping links on Tab, and
+  // Option+Tab does not reach them on every platform. Focus the link directly
+  // there; the other browsers verify that it is the first Tab stop.
+  if (browserName === "webkit") await skipLink.focus()
+  else await page.keyboard.press("Tab")
+
   await expect(skipLink).toBeFocused()
   await expect(skipLink).toBeVisible()
   await expect(skipLink).toHaveAttribute("href", "#main-content")

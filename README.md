@@ -60,15 +60,17 @@ bun run build           # Production build
 bun run test -- --workers=1   # Playwright end-to-end tests
 ```
 
-The first time you run the tests, install the Chromium browser. The Playwright config stores browsers in the ignored `.playwright-browsers/` directory:
+The tests run in Chromium, Firefox and WebKit. The first time you run them, install those browsers. The Playwright config stores browsers in the ignored `.playwright-browsers/` directory:
 
 ```bash
 # macOS / Linux
-PLAYWRIGHT_BROWSERS_PATH=.playwright-browsers bunx playwright install chromium
+PLAYWRIGHT_BROWSERS_PATH=.playwright-browsers bunx playwright install chromium firefox webkit
 
 # Windows (PowerShell)
-$env:PLAYWRIGHT_BROWSERS_PATH=".playwright-browsers"; bunx playwright install chromium
+$env:PLAYWRIGHT_BROWSERS_PATH=".playwright-browsers"; bunx playwright install chromium firefox webkit
 ```
+
+Run a single browser with `bun run test -- --project=chromium` (or `firefox`, `webkit`). Firefox tests are retried once, because Playwright's Firefox occasionally crashes the page during the axe scan. A retried pass is reported as flaky.
 
 `bun run test` starts the development server on port 3000 automatically. If a server is already running there, the tests reuse it.
 
@@ -118,7 +120,7 @@ Edit `data/portfolio.ts`:
 
 ## Testing and accessibility
 
-The Playwright suite in `e2e/homepage.spec.ts` covers:
+The Playwright suite in `e2e/homepage.spec.ts` runs in desktop Chromium, Firefox and WebKit and covers:
 
 - content rules
 - theme cycling and persistence
@@ -140,7 +142,7 @@ Automated checks catch only part of what affects accessibility. Manual screen-re
 
 - Projects are not shown yet. Independent personal projects will be added in a future update once they are complete and verified.
 - There is no canonical domain, social share image, sitemap or `robots.txt` yet. These depend on the final domain.
-- The tests run in Chromium only. Other browsers have not been tested systematically.
+- The tests use Playwright's desktop browser engines. Real Safari, iOS and Android devices have not been tested. In WebKit the skip-link test focuses the link directly, because Safari skips links on Tab by default.
 
 ## Roadmap
 

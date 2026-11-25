@@ -8,6 +8,7 @@ export default defineConfig([
   globalIgnores([
     ".next/**",
     ".bun-cache/**",
+    ".playwright-browsers/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
